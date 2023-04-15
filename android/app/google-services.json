@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "404646274878",
+    "project_id": "ourvoice-37491",
+    "storage_bucket": "ourvoice-37491.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404646274878:android:7b4e6ca3e10d43de8cee6f",
+        "android_client_info": {
+          "package_name": "com.example.our_voice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404646274878-pmpt5mt51jdpg2n5um4gj2pj71bvkbf2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYzNkd36grBvTS6YborMTLhC-VpsNBh1k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404646274878-pmpt5mt51jdpg2n5um4gj2pj71bvkbf2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
