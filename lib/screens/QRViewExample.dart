@@ -1,9 +1,8 @@
-import 'dart:developer';
+
 import 'dart:io';
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
-import 'package:our_voice/main.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 

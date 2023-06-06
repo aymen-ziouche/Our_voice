@@ -66,7 +66,7 @@ class SignUpState extends State<SignupPage> {
                 title: Text(
                   'PROFILE CREATION',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline4!.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColor,
                       ),

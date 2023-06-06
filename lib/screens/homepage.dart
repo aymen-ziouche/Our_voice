@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:our_voice/modules/art.dart';
+import 'package:our_voice/modules/comment.dart';
+import 'package:our_voice/providers/artProvider.dart';
+import 'package:our_voice/providers/commentsProvider.dart';
 import 'package:our_voice/providers/userprovider.dart';
-import 'package:our_voice/screens/auth/signin_screen.dart';
-import 'package:our_voice/services/auth.dart';
+import 'package:our_voice/services/database.dart';
 import 'package:our_voice/widgets/canvasViewWidget.dart';
-import 'package:our_voice/widgets/mainbutton.dart';
+import 'package:our_voice/widgets/commentsViewWidget.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,6 +25,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final userProvider = context.read<UserProvider>();
     userProvider.fetchUser();
+    final artProvider = context.read<ArtProvider>();
+    artProvider.fetchArts();
   }
 
   @override
@@ -30,65 +37,129 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(15).copyWith(bottom: 1),
-            child: Text(
-              "Artworks:",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall!
-                  .copyWith(fontWeight: FontWeight.w700),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24.0,
+              vertical: 20.0,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(
+                    color: Theme.of(context).primaryColor.withOpacity(0.4)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: const <Widget>[
+                  Icon(
+                    FontAwesomeIcons.magnifyingGlass,
+                    color: Colors.grey,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      style: TextStyle(fontSize: 16.0),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.only(
+                            left: 15, bottom: 11, top: 11, right: 15),
+                        hintText: 'Search Artworks, Artist and much more',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(
             height: 10,
           ),
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 8,
-              childAspectRatio: MediaQuery.of(context).size.width /
-                  (MediaQuery.of(context).size.height / 1.4),
-            ),
-            itemCount: 5,
-            itemBuilder: (BuildContext context, int index) {
-              return const CanvasViewWidget();
-            },
-          ),
-          MainButton(
-            text: 'Log Out',
-            onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const SigninPage()),
-                (Route<dynamic> route) => false,
-              );
-              Auth().logout();
-            },
-          ),
-          // SizedBox(
-          //   height: 200,
-          //   child: Consumer<CanvasProvider>(
-          //     builder: (context, provider, child){
-          //       return PageView.builder(
-          //         scrollDirection: Axis.horizontal,
-          //         itemCount: pagedata.maindata.topspaces.length,
-          //         controller: PageController(
-          //           initialPage: pagedata.maindata.topspaces.length ~/ 2,
-          //           viewportFraction: 0.8,
-          //         ),
-          //         itemBuilder: (BuildContext context, int index) {
-          //           return CanvasViewWidget(
-          //             // topspacedata: pagedata.maindata.topspaces[index],
-          //           );
-          //         },
+          // Consumer<CommentsProvider>(builder: (context, provider, child) {
+          //   return ListView.builder(
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     shrinkWrap: true,
+          //     padding: const EdgeInsets.symmetric(horizontal: 8),
+          //     itemCount: provider.comments.length,
+          //     itemBuilder: (BuildContext context, int index) {
+          //       Comment comment = provider.comments[index];
+          //       return CommentsViewWidget(
+          //         comment: comment,
           //       );
-          //     }
-          //   ),
-          // ),
+          //     },
+          //   );
+          // }),
+          StreamBuilder(
+            stream: Database().loadComments(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<Comment> cmnt = [];
+                for (var doc in snapshot.data!.docs) {
+                  var data = doc;
+                  cmnt.add(
+                    Comment(
+                      artId: data.data().toString().contains('ArtID')
+                          ? doc.get('ArtID')
+                          : "",
+                      commentor: data.data().toString().contains('Commentor')
+                          ? doc.get('Commentor')
+                          : "",
+                      url: data.data().toString().contains('url')
+                          ? doc.get('url')
+                          : "",
+                      praises: data.data().toString().contains('praises')
+                          ? doc.get('praises')
+                          : "",
+                      critics: data.data().toString().contains('critics')
+                          ? doc.get('critics')
+                          : "",
+                    ),
+                  );
+                }
+                return SizedBox(
+                  height: 23.h,
+                  child: PageView.builder(
+                    controller: PageController(
+                      initialPage: cmnt.length ~/ 2,
+                      viewportFraction: 0.8,
+                    ),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: cmnt.length,
+                    itemBuilder: (context, index) => CommentsViewWidget(
+                      comment: Comment(
+                          artId: cmnt[index].artId,
+                          commentor: cmnt[index].commentor,
+                          url: cmnt[index].url,
+                          praises: cmnt[index].praises,
+                          critics: cmnt[index].critics),
+                    ),
+                  ),
+                );
+              }
+              return const Center(
+                child: Text("Loading..."),
+              );
+            },
+          ),
+          Consumer<ArtProvider>(
+            builder: (context, provider, child) {
+              return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: provider.arts.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Art art = provider.arts[index];
+                  return CanvasViewWidget(
+                    art: art,
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
     );

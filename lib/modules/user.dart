@@ -15,8 +15,13 @@ class User {
   final String postalcode;
   final bool pending;
   final int canvas;
+  final int filled;
   final String profilePicture;
   final String coverPicture;
+  final List praise;
+  final List critic;
+  final List followings;
+  final List followers;
 
   User({
     this.uid = "",
@@ -33,8 +38,13 @@ class User {
     this.postalcode = "",
     this.pending = false,
     this.canvas = 0,
+    this.filled = 0,
     this.profilePicture = "",
     this.coverPicture = "",
+    this.praise = const [],
+    this.critic = const [],
+    this.followings = const [],
+    this.followers = const [],
   });
 
   factory User.fromFirestore(DocumentSnapshot snapshot) {
@@ -53,8 +63,14 @@ class User {
       city: data["city"],
       postalcode: data["postalcode"],
       pending: data["pending"] as bool,
+      canvas: data["canvas"],
+      filled: data["filled"],
       profilePicture: data["profile_picture"],
       coverPicture: data["cover_picture"],
+      praise: data["praise"],
+      critic: data["critic"],
+      followings: data["followings"],
+      followers: data["followers"],
     );
   }
 }

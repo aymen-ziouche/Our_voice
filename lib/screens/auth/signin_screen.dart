@@ -3,6 +3,7 @@ import 'package:our_voice/screens/auth/signup_screen.dart';
 import 'package:our_voice/screens/main/mainpage.dart';
 import 'package:our_voice/services/auth.dart';
 import 'package:our_voice/widgets/mainbutton.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class SigninPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SigninPageState extends State<SigninPage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            vertical: 60,
+            vertical: 20,
             horizontal: 32,
           ),
           child: Form(
@@ -41,12 +42,20 @@ class _SigninPageState extends State<SigninPage> {
                 children: [
                   Text(
                     "Login",
-                    style: Theme.of(context).textTheme.headline4!.copyWith(
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).primaryColor,
                         ),
                   ),
-                  const SizedBox(height: 90.0),
+                  SizedBox(
+                    height: 35.h,
+                    child: const Center(
+                      child: Image(
+                        image: AssetImage('images/logo.png'),
+                      ),
+                    ),
+                  ),
+                  // const SizedBox(height: 60.0),
                   TextFormField(
                     controller: _emailController,
                     focusNode: _emailFocusNode,
@@ -69,7 +78,7 @@ class _SigninPageState extends State<SigninPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 34.0),
+                  const SizedBox(height: 30.0),
                   TextFormField(
                     controller: _passwordController,
                     focusNode: _passwordFocusNode,
@@ -90,7 +99,7 @@ class _SigninPageState extends State<SigninPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 15.0),
                   Align(
                     alignment: Alignment.topRight,
                     child: InkWell(
@@ -105,7 +114,7 @@ class _SigninPageState extends State<SigninPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 32,
+                    height: 30,
                   ),
                   MainButton(
                     text: "Login",
@@ -115,26 +124,30 @@ class _SigninPageState extends State<SigninPage> {
                         _globalKey.currentState!.save();
                         if (eula == true) {
                           try {
-                          final authresult = await _auth.signIn(
-                              _emailController.text, _passwordController.text);
-                          Navigator.pushReplacementNamed(context, MainPage.id);
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                e.toString(),
+                            final authresult = await _auth.signIn(
+                                _emailController.text,
+                                _passwordController.text);
+                            Navigator.pushReplacementNamed(
+                                context, MainPage.id);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  e.toString(),
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                        }else{
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('You need to read and accept the EULA')));
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'You need to read and accept the EULA')));
                         }
                       }
                     },
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -153,15 +166,16 @@ class _SigninPageState extends State<SigninPage> {
                           launchUrlString(
                               'https://shopnest.club/ourterms.html');
                         },
-                        child: const Text(
+                        child: Text(
                           'I\'ve read and accept the terms of use',
-                          style:
-                              TextStyle(color: Colors.deepPurple, fontSize: 10),
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 10),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
+                  const SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -180,7 +194,7 @@ class _SigninPageState extends State<SigninPage> {
                           'Register',
                           style: TextStyle(
                               fontSize: 15,
-                              color: Colors.indigo,
+                              color: Color(0xFF6006EE),
                               fontWeight: FontWeight.bold),
                         ),
                         onTap: () {

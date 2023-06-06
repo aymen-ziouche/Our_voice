@@ -1,8 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:our_voice/providers/artProvider.dart';
+import 'package:our_voice/providers/commentsProvider.dart';
+import 'package:our_voice/providers/ownerProvider.dart';
 import 'package:our_voice/providers/userprovider.dart';
 import 'package:our_voice/screens/QRViewExample.dart';
-import 'package:our_voice/screens/addArtPage.dart';
+import 'package:our_voice/screens/artCreation/addArtPage.dart';
+import 'package:our_voice/screens/artCreation/artCreation.dart';
 import 'package:our_voice/screens/auth/signin_screen.dart';
 import 'package:our_voice/screens/auth/signup_screen.dart';
 import 'package:our_voice/screens/main/authgate.dart';
@@ -30,6 +34,13 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(
               create: (_) => UserProvider(),
             ),
+            ChangeNotifierProvider(
+              create: (_) => ArtProvider(),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => CommentsProvider(),
+            ),
+            
           ],
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
@@ -43,6 +54,7 @@ class MyApp extends StatelessWidget {
               HomePage.id: (context) => const HomePage(),
               AddArtPage.id: (context) => const AddArtPage(),
               QRViewExample.id: (context) => const QRViewExample(),
+              ArtCreationScreen.id: (context) => const ArtCreationScreen(),
             },
             theme: ThemeData(
               useMaterial3: true,
@@ -50,14 +62,14 @@ class MyApp extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: Color(0xFF585A82),
+                    color: Color(0xFF6006EE),
                     style: BorderStyle.solid,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: const BorderSide(
-                    color: Color(0xFF585A82),
+                    color: Color(0xFF6006EE),
                     style: BorderStyle.solid,
                   ),
                 ),
@@ -67,8 +79,8 @@ class MyApp extends StatelessWidget {
                 labelStyle: const TextStyle(
                   color: Colors.black38,
                 ),
-                hintStyle: const TextStyle(
-                  color: Color.fromARGB(255, 233, 220, 212),
+                hintStyle: TextStyle(
+                  color: const Color(0xFF6006EE).withOpacity(0.4),
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -79,12 +91,12 @@ class MyApp extends StatelessWidget {
                     const EdgeInsets.all(10),
                   ),
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(const Color(0xFF585A82)),
+                      MaterialStateProperty.all<Color>(const Color(0xFF6006EE)),
                   foregroundColor:
                       MaterialStateProperty.all<Color>(Colors.white),
                 ),
               ),
-              primaryColor: const Color(0xFF585A82),
+              primaryColor: const Color(0xFF6006EE),
               canvasColor: Colors.white,
               appBarTheme: const AppBarTheme(
                 surfaceTintColor: Colors.white,

@@ -4,13 +4,11 @@ import 'package:our_voice/modules/user.dart';
 import 'package:our_voice/services/auth.dart';
 
 class UserProvider extends ChangeNotifier {
-  User? _user;
+   User? _user;
 
   User? get user => _user;
 
   String userid = Auth().currentUser!.uid;
-  
-
 
   Future<void> fetchUser() async {
     final snapshot =
